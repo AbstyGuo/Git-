@@ -78,6 +78,14 @@ git的设置文件为 `.gitconfig`，它可以在用户主目录下（**全局�
 
 * `git status` 显示有变更的文件
 * `git status -sb` 显示有变更的文件，和当前的分支状态
+
+    执行git status -sb指令如下图
+    
+    ![](./gitstatus-sb.png)
+    
+    > `??` 表示未跟踪文件
+    > `M` 表示跟踪有变动文件
+
 * `git log` 显示当前分支的版本历史
 * `git log --stat` 显示commit历史，以及每次commit发生变更的文件
 * `git log -S [keyword]` 搜索提交历史，根据关键词

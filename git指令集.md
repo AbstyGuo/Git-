@@ -1,3 +1,5 @@
+[TOC]
+
 [转载连接地址](https://blog.csdn.net/web_csdn_share/article/details/79243308)
 
 
@@ -132,7 +134,52 @@ git的设置文件为 `.gitconfig`，它可以在用户主目录下（**全局�
 * `git stash ` 暂时将未提交的变化移除，稍后再移入
 * `git stash pop ` 暂时将未提交的变化移除，稍后再移入
  
- ## 十一、其他
- * `git archive` 生成一个可供发布的压缩包
+## 十一、其他
+* `git archive` 生成一个可供发布的压缩包
+* 忽略已跟踪的文件
+ 
+ 	```
+ 	精确忽略已跟踪的文件 
+   	 	git update-index --assume-unchaged [file]   
+ 	忽略当前目录下的已跟踪文件
+	 	git ls-files -z | xargs -0 git update-index --assume-unchanged  
+	恢复当前目录下忽略的已跟踪文件
+	  	git ls-files -z | xargs -0 git update-index --no-assume-unchanged   
+ 	```
+ 
+ ## 十二、问题
  
  
+ ### 1. `early EOF`问题
+ git clone 大文件时，中间半途退出问题
+ 
+>
+ 	client_loop: send disconnect: Broken pipeMiB | 81.00 KiB/s  
+	fetch-pack: unexpected disconnect while reading sideband packet
+	fatal: early EOF
+	fatal: index-pack failed
+ 
+解决方案：
+
+* 只克隆一层  ，指令为 `git clone --depth 1  url`
+	[depth描述链接](https://blog.csdn.net/qq_43827595/article/details/104833980) 
+	[其他指令链接](https://www.wangt.cc/2021/03/git%E5%85%8B%E9%9A%86%E5%A4%A7%E4%BB%93%E5%BA%93%E6%8A%A5%E9%94%99%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/)
+	* `git fetch --unshallow`
+	* `git fetch --depth=2147483647`
+	* `git pull --all` 
+
+	
+* 如果不管用，可以借用码云中转。
+	* 登录 gitee账号，右上角 `+` -> `从github/gitLab导入仓库`
+	* 输入对应的url，点击导入
+	* 等待一会，会在账号下建立一个同内容的仓库，终端执行指令，clone这个仓库
+	* 完成后，进入.git文件，修改config文件里的 url 为开始要clone的url
+* 修改git的配置
+	* `git config --global http.postBuffer 524288000`
+	* `export GIT_TRACE_PACKET=1`
+	* `export GIT_TRACE=1`
+	* `export GIT_CURL_VERBOSE=1 `
+ 
+ 
+ 
+ $ git remote set-branches origin 'baseline_prd'
